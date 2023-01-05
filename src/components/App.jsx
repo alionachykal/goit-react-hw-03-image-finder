@@ -8,7 +8,8 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
-
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 
 
 export class App extends Component {
@@ -27,7 +28,7 @@ export class App extends Component {
     this.setState({ isLoading: true });
     const inputForSearch = e.target.elements.inputForSearch;
     if (inputForSearch.value.trim() === '') {
-            alert('Please enter a search term.');
+            toast.error('Please enter a search term.');
             return;
         }
     const response = await fetchImages(inputForSearch.value, 1);
@@ -108,6 +109,7 @@ export class App extends Component {
             handleClose={this.handleModalClose}
           />
         ) : null}
+        <ToastContainer autoClose={3000}/>
       </div>
     );
   }
