@@ -8,7 +8,7 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
-import { toast } from 'react-toastify';
+
 
 
 export class App extends Component {
@@ -27,7 +27,7 @@ export class App extends Component {
     this.setState({ isLoading: true });
     const inputForSearch = e.target.elements.inputForSearch;
     if (inputForSearch.value.trim() === '') {
-            alert('Пожалуйста введите поисковое слово.');
+            alert('Please enter a search term.');
             return;
         }
     const response = await fetchImages(inputForSearch.value, 1);
