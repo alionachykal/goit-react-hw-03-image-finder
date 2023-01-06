@@ -2,7 +2,7 @@ import { Component } from 'react';
 import React from 'react';
 
 import { Searchbar } from './Searchbar/Searchbar';
-import { fetchImages } from './Api/fetchImages';
+import { fetchImages } from '../Api/fetchImages';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 
 import { Button } from './Button/Button';
@@ -22,6 +22,18 @@ export class App extends Component {
     modalImg: '',
     modalAlt: '',
   };
+  componentDidMount() {
+    const parsedImages = JSON.parse(localStorage.getItem("images"));
+    if (parsedImages !== null) {
+      this.setState({ images: parsedImages });
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.images !== prevState.images) {
+      localStorage.setItem("images", JSON.stringify(this.state.images));
+    }
+  }
+
 
   handleSubmit = async e => {
     e.preventDefault();
@@ -55,7 +67,7 @@ export class App extends Component {
   handleImageClick = e => {
     this.setState({
       modalOpen: true,
-      modalAlt: e.target.alt,
+       modalAlt: e.target.alt,
       modalImg: e.target.name,
     });
   };
@@ -63,20 +75,23 @@ export class App extends Component {
   handleModalClose = () => {
     this.setState({
       modalOpen: false,
-      modalImg: '',
+         modalImg: '',
       modalAlt: '',
     });
   };
 
-  handleKeyDown = event => {
-    if (event.code === 'Escape') {
-      this.handleModalClose();
-    }
-  };
+//   handleKeyDown = event => {
+//     if (event.code === 'Escape') {
+//       this.handleModalClose();
+//     }
+//   };
 
-  async componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
+//  componentDidMount() {
+//     window.addEventListener('keydown', this.handleKeyDown);
+//   }
+//    componentWillUnmount() {
+//     window.removeEventListener('keydown', this.handleKeyDown);
+//   }
 
   render() {
     return (

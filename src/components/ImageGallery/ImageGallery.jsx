@@ -6,8 +6,8 @@ import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 
 export const ImageGallery = ({ images, onImageClick }) => (
   <ul className={css.ImageGallery}>
-    {images.map((image, index) => (
-      <ImageGalleryItem onclick={onImageClick} image={image} key={index} />
+    {images.map((image, id) => (
+      <ImageGalleryItem onclick={onImageClick} image={image} key={id} />
     ))}
   </ul>
 );
