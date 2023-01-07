@@ -20,4 +20,3 @@ ImageGallery.propTypes = {
   ),
   onImageClick: propTypes.func.isRequired,
 };
-

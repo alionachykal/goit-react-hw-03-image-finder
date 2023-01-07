@@ -1,4 +1,3 @@
-
 import propTypes from 'prop-types';
 import css from './ImageGalleryItem.module.css';
 

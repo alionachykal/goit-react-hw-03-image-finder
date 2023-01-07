@@ -80,18 +80,7 @@ export class App extends Component {
     });
   };
 
-//   handleKeyDown = event => {
-//     if (event.code === 'Escape') {
-//       this.handleModalClose();
-//     }
-//   };
 
-//  componentDidMount() {
-//     window.addEventListener('keydown', this.handleKeyDown);
-//   }
-//    componentWillUnmount() {
-//     window.removeEventListener('keydown', this.handleKeyDown);
-//   }
 
   render() {
     return (
@@ -103,20 +92,23 @@ export class App extends Component {
           paddingBottom: '24px',
         }}
       >
-        {this.state.isLoading ? (
+   
+          <React.Fragment>
+          <Searchbar onSubmit={this.handleSubmit} />
+           {this.state.isLoading ? (
           <Loader />
         ) : (
-          <React.Fragment>
-            <Searchbar onSubmit={this.handleSubmit} />
             <ImageGallery
               onImageClick={this.handleImageClick}
               images={this.state.images}
             />
+           )}
+              
             {this.state.images.length > 0 ? (
               <Button onClick={this.handleClickMore} />
             ) : null}
           </React.Fragment>
-        )}
+    
         {this.state.modalOpen ? (
           <Modal
             src={this.state.modalImg}
