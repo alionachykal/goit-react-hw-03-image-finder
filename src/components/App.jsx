@@ -22,17 +22,20 @@ export class App extends Component {
     modalImg: '',
     modalAlt: '',
   };
-  componentDidMount() {
-    const parsedImages = JSON.parse(localStorage.getItem("images"));
-    if (parsedImages !== null) {
-      this.setState({ images: parsedImages });
+ 
+  async componentDidUpdate(prevProps, prevState) {
+    if (this.state.currentSearch !== prevState.currentSearch || this.state.pageNr !==prevState.pageNr) {
+   const response = await fetchImages(
+      this.state.currentSearch,
+      this.state.pageNr + 1
+    );
+    this.setState({
+      images: [...this.state.images, ...response],
+      pageNr: this.state.pageNr + 1,
+    });
+  };
     }
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.images !== prevState.images) {
-      localStorage.setItem("images", JSON.stringify(this.state.images));
-    }
-  }
+  
 
 
   handleSubmit = async e => {
@@ -49,18 +52,6 @@ export class App extends Component {
       isLoading: false,
       currentSearch: inputForSearch.value,
       pageNr: 1,
-    });
-  };
-
-
-  handleClickMore = async () => {
-    const response = await fetchImages(
-      this.state.currentSearch,
-      this.state.pageNr + 1
-    );
-    this.setState({
-      images: [...this.state.images, ...response],
-      pageNr: this.state.pageNr + 1,
     });
   };
 
