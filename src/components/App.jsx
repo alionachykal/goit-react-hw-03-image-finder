@@ -1,62 +1,35 @@
-import { Component } from 'react';
-import React from 'react';
+import { Component } from "react";
+import React from "react";
 
-import { Searchbar } from './Searchbar/Searchbar';
-import { fetchImages } from '../Api/fetchImages';
-import { ImageGallery } from './ImageGallery/ImageGallery';
+import { Searchbar } from "./Searchbar/Searchbar";
+// import { fetchImages } from '../Api/fetchImages';
+import { ImageGallery } from "./ImageGallery/ImageGallery";
 
-import { Button } from './Button/Button';
-import { Loader } from './Loader/Loader';
-import { Modal } from './Modal/Modal';
-import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css'
-
+// import { Button } from './Button/Button';
+// import { Loader } from './Loader/Loader';
+import { Modal } from "./Modal/Modal";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export class App extends Component {
   state = {
-    images: [],
-    isLoading: false,
-    currentSearch: '',
-    pageNr: 1,
+    currentSearch: "",
     modalOpen: false,
-    modalImg: '',
-    modalAlt: '',
+    modalImg: "",
+    modalAlt: "",
+  };
+
+ 
+
+  handleSubmit = (currentSearch) => {
+    this.setState({ currentSearch });
   };
  
 
-
-  handleClickMore = async () => {
-    const response = await fetchImages(
-      this.state.currentSearch,
-      this.state.pageNr + 1
-    );
-    this.setState({
-      images: [...this.state.images, ...response],
-      pageNr: this.state.pageNr + 1,
-    });
-  };
- 
-  handleSubmit = async e => {
-    e.preventDefault();
-    this.setState({ isLoading: true });
-    const inputForSearch = e.target.elements.inputForSearch;
-    if (inputForSearch.value.trim() === '') {
-            toast.error('Please enter a search term.');
-            return;
-        }
-    const response = await fetchImages(inputForSearch.value, 1);
-    this.setState({
-      images: response,
-      isLoading: false,
-      currentSearch: inputForSearch.value,
-      pageNr: 1,
-    });
-  };
-
-  handleImageClick = e => {
+  handleImageClick = (e) => {
     this.setState({
       modalOpen: true,
-       modalAlt: e.target.alt,
+      modalAlt: e.target.alt,
       modalImg: e.target.name,
     });
   };
@@ -64,49 +37,41 @@ export class App extends Component {
   handleModalClose = () => {
     this.setState({
       modalOpen: false,
-         modalImg: '',
-      modalAlt: '',
+      modalImg: "",
+      modalAlt: "",
     });
   };
 
-
-
   render() {
+    const { currentSearch, modalImg, modalAlt, modalOpen } = this.state;
     return (
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr',
-          gridGap: '16px',
-          paddingBottom: '24px',
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          gridGap: "16px",
+          paddingBottom: "24px",
         }}
       >
-   
-          <React.Fragment>
-          <Searchbar onSubmit={this.handleSubmit} />
-           {this.state.isLoading ? (
-          <Loader />
-        ) : (
-            <ImageGallery
-              onImageClick={this.handleImageClick}
-              images={this.state.images}
-            />
-           )}
-              
-            {this.state.images.length > 0 ? (
-              <Button onClick={this.handleClickMore} />
-            ) : null}
-          </React.Fragment>
-    
-        {this.state.modalOpen ? (
+        <React.Fragment>
+          <Searchbar onSubmit={(e) => this.handleSubmit(e)} />
+          <ImageGallery
+            onImageClick={this.handleImageClick}
+            currentSearch={currentSearch}
+          />
+        </React.Fragment>
+
+        {modalOpen ? (
           <Modal
-            src={this.state.modalImg}
-            alt={this.state.modalAlt}
+            src={modalImg}
+            alt={modalAlt}
             handleClose={this.handleModalClose}
           />
         ) : null}
-        <ToastContainer autoClose={3000}/>
+        <ToastContainer autoClose={3000} />
       </div>
     );
   }
 }
+
+

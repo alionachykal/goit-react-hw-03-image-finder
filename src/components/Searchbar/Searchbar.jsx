@@ -1,78 +1,55 @@
 import propTypes from 'prop-types';
 import css from './Searchbar.module.css';
-// import { Component } from 'react';
-// import { toast } from 'react-toastify';
+import { Component } from "react";
 
-// export class Searchbar extends Component {
-//   static propTypes = {
-//     onSubmit: propTypes.func.isRequired,
-//   };
-//   state = {
-//     currentSearch: '',
-//   }
-//    onChangeInput = e => {
-//     this.setState({ currentSearch: e.currentTarget.value });
-//   };
+import { toast } from "react-toastify";
 
-//   onSubmitForm = e => {
-//     e.preventDefault();
+export class Searchbar extends Component {
+  state = {
+    currentSearch: "",
+  };
 
-//     const { onSubmit } = this.props;
-//     const {currentSearch } = this.state;
+  handleNameChange = (e) => {
+    this.setState({ currentSearch: e.currentTarget.value.toLowerCase() });
+  };
 
-//     if (currentSearch.trim() === '') {
-//       toast.error('Enter a search term.');
-//       return;
-//     }
-//      onSubmit(currentSearch);
-//   };
+  handleSubmit = (e) => {
+    e.preventDefault();
 
-//   render() {
-//     const { currentSearch} = this.state;
+    if (this.state.currentSearch.trim() === "") {
+      toast.warning("Enter sth");
+      return;
+    }
 
-//     return (
-//       <header className={css.header}>
-//         <form className={css.SearchForm} onSubmit={this.onSubmitForm}>
-//           <button type="submit" className={css.SearchFormButton}>
-//           <span className={css.SearchFormButtonLabel}>Search</span>
-//          </button>
+    this.props.onSubmit(this.state.currentSearch);
+    this.setState({ currentSearch: "" });
+  };
 
+  render() {
+    const { currentSearch } = this.state;
 
-//           <input
-//              className={css.SearchFormInput}
-//             type="text"
-//             autoComplete="off"
-//             autoFocus
-//             placeholder="Search images and photos"
-//             value={currentSearch}
-//             onChange={this.onChangeInput}
-//           />
-//         </form>
-//       </header>
-//     );
-//   }
-// }
+    return (
+      <header className={css.Searchbar}>
+        <form className={css.SearchForm} onSubmit={this.handleSubmit}>
+          <button type="submit" className={css.SearchFormButton}>
+            <span className={css.SearchFormButtonLabel}>Search</span>
+          </button>
 
-
-
- export const Searchbar = ({ onSubmit }) => (
-  <header className={css.Searchbar}>
-    <form className={css.SearchForm} onSubmit={onSubmit}>
-      <button type="submit" className={css.SearchFormButton}>
-        <span className={css.SearchFormButtonLabel}>Search</span>
-      </button>
-
-      <input
-        name="inputForSearch"
-        className={css.SearchFormInput}
-        type="text"
-        autoComplete="off"
-        autoFocus
-        placeholder="Search images and photos"
-      />
-    </form>
-  </header>
-);
+          <input
+            name="inputForSearch"
+            className={css.SearchFormInput}
+            type="text"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+            value={currentSearch}
+            onChange={this.handleNameChange}
+          />
+        </form>
+      </header>
+    );
+  }
+}
 
 Searchbar.propTypes = {
   onSubmit: propTypes.func,
