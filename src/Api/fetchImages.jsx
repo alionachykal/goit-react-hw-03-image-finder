@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { toast } from "react-toastify";
+
 
 axios.defaults.baseURL = `https://pixabay.com/api`;
 
