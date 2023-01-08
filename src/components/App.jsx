@@ -23,9 +23,10 @@ export class App extends Component {
     modalAlt: '',
   };
  
-  async componentDidUpdate(prevProps, prevState) {
-    if (this.state.currentSearch !== prevState.currentSearch || this.state.pageNr !==prevState.pageNr) {
-   const response = await fetchImages(
+
+
+  handleClickMore = async () => {
+    const response = await fetchImages(
       this.state.currentSearch,
       this.state.pageNr + 1
     );
@@ -34,10 +35,7 @@ export class App extends Component {
       pageNr: this.state.pageNr + 1,
     });
   };
-    }
-  
-
-
+ 
   handleSubmit = async e => {
     e.preventDefault();
     this.setState({ isLoading: true });
