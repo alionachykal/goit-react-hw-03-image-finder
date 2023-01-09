@@ -17,6 +17,7 @@ export class App extends Component {
     modalOpen: false,
     modalImg: "",
     modalAlt: "",
+    
   };
 
  

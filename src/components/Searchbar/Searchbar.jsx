@@ -20,6 +20,7 @@ export class Searchbar extends Component {
       toast.warning("Enter sth");
       return;
     }
+    
 
     this.props.onSubmit(this.state.currentSearch);
     this.setState({ currentSearch: "" });

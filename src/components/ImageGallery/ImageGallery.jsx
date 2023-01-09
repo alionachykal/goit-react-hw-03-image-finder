@@ -21,9 +21,10 @@ export class ImageGallery extends Component {
     const prevPage = prevState.page;
     const nextPage = this.state.page;
 
-    if (prevName !== nextName) {
-      this.setState({ imagesArray: [] });
+   if (prevName !== nextName) {
+      this.setState({ imagesArray: [], page: 1 });
     }
+    
 
     if (prevName !== nextName || prevPage !== nextPage) {
       this.setState({ isLoading: true });
@@ -64,17 +65,18 @@ export class ImageGallery extends Component {
     const { imagesArray, isLoading } = this.state;
 
      return (
-      <>
+       <>
+         {imagesArray.length !== 0 && (
 
-        <ul className={css.ImageGallery}>
-          {imagesArray.map((image) => (
-            <ImageGalleryItem
-              onclick={this.props.onImageClick}
-              image={image}
-              key={image.id}
-            />
-          ))}
-         </ul>
+           <ul className={css.ImageGallery}>
+             {imagesArray.map((image) => (
+               <ImageGalleryItem
+                 onclick={this.props.onImageClick}
+                 image={image}
+                 key={image.id}
+               />
+             ))}
+           </ul>)}
             {isLoading && <Loader />}
         {imagesArray.length > 0 ? (
           <Button  onClick={this.handleClickMore} />
