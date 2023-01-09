@@ -63,20 +63,21 @@ export class ImageGallery extends Component {
   render() {
     const { imagesArray, isLoading } = this.state;
 
-    return (
+     return (
       <>
-        {isLoading && <Loader />}
+
         <ul className={css.ImageGallery}>
-          {imagesArray.map((image, id) => (
+          {imagesArray.map((image) => (
             <ImageGalleryItem
               onclick={this.props.onImageClick}
               image={image}
-              key={id}
+              key={image.id}
             />
           ))}
-        </ul>
+         </ul>
+            {isLoading && <Loader />}
         {imagesArray.length > 0 ? (
-          <Button onClick={this.handleClickMore} />
+          <Button  onClick={this.handleClickMore} />
         ) : null}
       </>
     );
