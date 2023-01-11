@@ -1,4 +1,4 @@
-import { Component } from "react";
+import  React, { Component } from 'react';
 import { toast } from "react-toastify";
 import propTypes from "prop-types";
 import { fetchImages } from "../../Api/fetchImages";
@@ -15,43 +15,44 @@ export class ImageGallery extends Component {
     isLoading: false,
   };
 
+  fetcher = (nextName, nextPage, prevName) => {
+    fetchImages(nextName, nextPage).then(
+      ({ hits: newImagesArray, totalHits: totalImages }) => {
+        if (newImagesArray.length === 0 && totalImages === 0) {
+          toast.error("Oops nothing found");
+          this.setState({ isLoading: false });
+          return;
+        }
+        if (newImagesArray.length === 0 && totalImages !== 0) {
+          toast.warning("Nothing more found");
+          this.setState({ isLoading: false });
+          return;
+        }
+        if (prevName !== nextName) {
+          toast.success(`Found ${totalImages} images`);
+          this.setState({ isLoading: false });
+        }
+        this.setState(({ imagesArray }) => ({
+          imagesArray: [...imagesArray, ...newImagesArray],
+          isLoading: false,
+        }));
+      }
+    );
+  };
+
   componentDidUpdate(prevProps, prevState) {
     const prevName = prevProps.currentSearch;
     const nextName = this.props.currentSearch;
     const prevPage = prevState.page;
     const nextPage = this.state.page;
 
-   if (prevName !== nextName) {
-      this.setState({ imagesArray: [], page: 1 });
+    if (prevName !== nextName) {
+      this.setState({ imagesArray: [], page: 1, isLoading: true });
+      this.fetcher(nextName);
     }
-    
-
-    if (prevName !== nextName || prevPage !== nextPage) {
+    if (prevPage !== nextPage && nextPage !== 1) {
       this.setState({ isLoading: true });
-      fetchImages(nextName, nextPage).then(
-        ({ hits: newImagesArray, totalHits: totalImages }) => {
-          if (newImagesArray.length === 0 && totalImages === 0) {
-            toast.error("Oops nothing found");
-            this.setState({ isLoading: false });
-            return;
-          }
-          if (newImagesArray.length === 0 && totalImages !== 0) {
-            toast.warning("Nothing more found");
-            this.setState({ isLoading: false });
-            return;
-          }
-          if (nextPage === 1) {
-            toast.success(`Found ${totalImages} images`);
-            this.setState({ isLoading: false });
-          }
-
-          this.setState(({ imagesArray }) => ({
-            imagesArray: [...imagesArray, ...newImagesArray],
-            isLoading: false,
-          }));
-          console.log(this.state.imagesArray);
-        }
-      );
+      this.fetcher(nextName, nextPage, prevName);
     }
   }
 
@@ -64,22 +65,22 @@ export class ImageGallery extends Component {
   render() {
     const { imagesArray, isLoading } = this.state;
 
-     return (
-       <>
-         {imagesArray.length !== 0 && (
-
-           <ul className={css.ImageGallery}>
-             {imagesArray.map((image) => (
-               <ImageGalleryItem
-                 onclick={this.props.onImageClick}
-                 image={image}
-                 key={image.id}
-               />
-             ))}
-           </ul>)}
-            {isLoading && <Loader />}
+    return (
+      <>
+        {imagesArray.length !== 0 && (
+          <ul className={css.ImageGallery}>
+            {imagesArray.map((image) => (
+              <ImageGalleryItem
+                onclick={this.props.onImageClick}
+                image={image}
+                key={image.id}
+              />
+            ))}
+          </ul>
+        )}
+        {isLoading && <Loader />}
         {imagesArray.length > 0 ? (
-          <Button  onClick={this.handleClickMore} />
+          <Button onClick={this.handleClickMore} isDisabled={isLoading} />
         ) : null}
       </>
     );
@@ -90,7 +91,7 @@ ImageGallery.propTypes = {
   images: propTypes.arrayOf(
     propTypes.shape({
       id: propTypes.number.isRequired,
-       })
+    })
   ),
   onImageClick: propTypes.func.isRequired,
 };
